@@ -1,0 +1,59 @@
+# Cruft
+*~
+*#
+.#*
+.DS_Store
+
+# IDE and Editors
+/.vscode
+/nbproject
+/packages/api/etc
+*.sublime-project
+*.sublime-workspace
+.idea
+.brackets.json
+.project
+_notes
+
+# Npm & Yarn
+/node_modules
+.npm
+.yarn-integrity
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+yarn.lock*
+
+# Compiled sources
+/error_log
+*.com
+*.class
+*.dll
+*.exe
+*.log
+*.o
+*.so
+
+# Laravel 5.7.*
+/.vagrant
+/public/hot
+/public/storage
+/public/uploads
+/storage/*.key
+/vendor
+.env
+composer.lock
+composer.phar
+Homestead.json
+Homestead.yaml
+
+# Test
+/coverage
+.eslintcache
+
+# Generated
+/public/asset
+
+# Gitkeep
+!**/.gitkeep

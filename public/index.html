@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="cache-control" content="public" />
+        <meta http-equiv="content-language" content="pt-br" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta name="author" content="Liberta" />
+        <meta name="copyright" content="© Liberta" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-TileColor" content="#00aba9" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+
+        <!-- SEO -->
+        <meta name="robots" content="all" />
+        <meta name="google" content="notranslate" />
+        <!-- END SEO -->
+
+        <!-- BASE PATH -->
+        <base href="/" />
+        <!-- END BASE PATH -->
+
+        <!-- FAVICON -->
+        <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
+        <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
+        <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+        <!-- END FAVICON -->
+
+        <!-- MANIFEST -->
+        <link href="/manifest.json" rel="manifest" />
+        <!-- END MANIFEST -->
+
+        <!-- DNS PREFETCH -->
+        <link crossorigin="crossorigin" href="//ajax.googleapis.com" rel="dns-prefetch" />
+        <link crossorigin="crossorigin" href="//cm.g.doubleclick.net" rel="dns-prefetch" />
+        <link crossorigin="crossorigin" href="//fonts.googleapis.com" rel="dns-prefetch" />
+        <link crossorigin="crossorigin" href="//fonts.gstatic.com" rel="dns-prefetch" />
+        <link crossorigin="crossorigin" href="//storage.googleapis.com" rel="dns-prefetch" />
+        <!-- END DNS PREFETCH -->
+
+        <!-- PRECONNECT -->
+        <link crossorigin="crossorigin" href="https://fonts.gstatic.com/" rel="preconnect" />
+        <!-- END PRECONNECT -->
+
+        <!-- PRELOAD -->
+        <link as="style" crossorigin="crossorigin" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="preload" />
+        <link as="font" crossorigin="crossorigin" href="https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UN7rgOUuhp.woff2" rel="preload" />
+        <link as="font" crossorigin="crossorigin" href="https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0b.woff2" rel="preload" />
+        <!-- END PRELOAD -->
+
+        <!-- STYLE -->
+        <link crossorigin="crossorigin" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet" />
+        <!-- END STYLE -->
+
+        <!-- NOSCRIPT -->
+        <noscript>
+            <div style="left: 50%; position: absolute; text-align: center; top: 50%; transform: translate3d(-50%, -50%, 0);">
+                <p>
+                    A aplicação precisa do JavaScript ativado
+                    <br />
+                    <br />
+                    Por favor ative o JavaScript no seu navegador
+                </p>
+            </div>
+        </noscript>
+        <!-- END NOSCRIPT -->
+    </head>
+
+    <body>
+        <h1>Teste</h1>
+        <ul id="messages"></ul>
+        <form action=""><input id="m" autocomplete="off" /><button>Send</button></form>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            $(function() {
+                var socket = io();
+
+                $('form').submit(function(e) {
+                    e.preventDefault(); // prevents page reloading
+                    socket.emit('msg', $('#m').val());
+                    $('#m').val('');
+                    return false;
+                });
+
+                socket.on('msg', function(msg) {
+                    $('#messages').append($('<li>').text(msg));
+                });
+
+                socket.on('disconnect', function() {
+                    console.log('Disconnected from server');
+                });
+            });
+        </script>
+    </body>
+</html>

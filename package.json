@@ -1,0 +1,36 @@
+{
+    "name": "socket-cotacoes",
+    "version": "1.0.0",
+    "author": {
+        "name": "Kevin M. Veiga",
+        "email": "kevin.veiga@gmail.com"
+    },
+    "description": "",
+    "license": "ISC",
+    "private": true,
+    "main": "./src/app.js",
+    "scripts": {
+        "prestart": "echo \"PreStart\"",
+        "dev": "NODE_ENV=development npm-run-all watch",
+        "prod": "NODE_ENV=production npm-run-all start",
+        "start": "babel-node ./src/app.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "watch": "nodemon"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.8.3",
+        "@babel/node": "^7.8.3",
+        "@babel/preset-env": "^7.8.3",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.0",
+        "eslint-plugin-prettier": "^3.1.2",
+        "nodemon": "^2.0.2",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^1.19.1"
+    },
+    "dependencies": {
+        "axios": "^0.19.2",
+        "express": "^4.17.1",
+        "socket.io": "^2.3.0"
+    }
+}

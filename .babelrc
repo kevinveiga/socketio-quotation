@@ -1,0 +1,19 @@
+{
+    "ignore": [],
+    "plugins": [],
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "corejs": { "version": "3" },
+                "loose": true,
+                "modules": "commonjs",
+                "targets": {
+                    "esmodules": false,
+                    "node": "current"
+                },
+                "useBuiltIns": "entry"
+            }
+        ]
+    ]
+}
