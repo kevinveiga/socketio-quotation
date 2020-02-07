@@ -55,12 +55,15 @@ const getApi = async (socket) => {
 io.on('connection', (socket) => {
     console.log('log: new user connected');
 
+    getApi(socket);
+
     if (interval) {
         clearInterval(interval);
     }
 
     interval = setInterval(() => {
         console.log('interval');
+
         getApi(socket);
     }, 30000);
 
