@@ -5,9 +5,12 @@ import socketIo from 'socket.io';
 
 import { pathPublic, port } from './config.js';
 
+// VARIABLE
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+let interval = null;
 
 // CONFIG
 app.use(express.static(pathPublic));
@@ -22,12 +25,10 @@ app.use((req, res, next) => {
     next();
 });
 
+// GET
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
-
-// VARIABLE
-let interval = null;
 
 // FUNCTION
 const getApi = async (socket) => {
