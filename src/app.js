@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { cacheAdapterEnhancer } from 'axios-extensions';
 import express from 'express';
 import http from 'http';
 import socketIo from 'socket.io';
@@ -9,6 +10,18 @@ import { pathPublic, port } from './config.js';
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+const apiCache1Day = axios.create({
+    adapter: cacheAdapterEnhancer(axios.defaults.adapter, { maxAge: 1000 * 60 * 60 * 24, max: 1000 }),
+    baseURL: '/',
+    headers: { 'Cache-Control': 'no-cache' }
+});
+
+const apiCache30Day = axios.create({
+    adapter: cacheAdapterEnhancer(axios.defaults.adapter, { maxAge: 1000 * 60 * 60 * 24 * 30, max: 300000000 }),
+    baseURL: '/',
+    headers: { 'Cache-Control': 'no-cache' }
+});
 
 let interval = null;
 
@@ -31,13 +44,70 @@ app.get('/', (req, res) => {
 });
 
 // FUNCTION
-const getApi = async (socket) => {
+/**
+ * @description Busca api do CDI e SELIC da HG Brasil.
+ */
+const getApiHGBrasil = async () => {
+    try {
+        const result = await apiCache30Day.get('https://api.hgbrasil.com/finance/taxes?key=0af40e75');
+
+        console.log('getApiHGBrasil: ', result.data.results);
+
+        return result.data.results;
+    } catch (error) {
+        console.error(`Error getApiHGBrasil: ${error.code}`);
+    }
+};
+
+/**
+ * @description Busca api da Infomoney.
+ * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney)
+ */
+const getApiInfomoney = async () => {
     try {
         const result = await axios.get('https://api.infomoney.com.br/ativos/ticker?type=json&_=1143');
 
-        socket.emit('quotationData', JSON.stringify(result.data));
+        console.log('getApiInfomoney: ', result.data);
+
+        return result.data;
     } catch (error) {
-        console.error(`Error: ${error.code}`);
+        console.error(`Error getApiInfomoney: ${error.code}`);
+    }
+};
+
+/**
+ * @description Busca api da Poupança do Banco Central.
+ */
+const getApiPoupanca = async () => {
+    try {
+        const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/1?formato=json');
+
+        console.log('getApiPoupanca: ', result.data);
+
+        return result.data;
+    } catch (error) {
+        console.error(`Error getApiPoupanca: ${error.code}`);
+    }
+};
+
+/**
+ * @description busca todas as apis.
+ * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney)
+ * @param {object} socket Objeto do socket.io.
+ */
+const getApis = async (socket) => {
+    try {
+        const [resultHGBrasil, resultInfomoney, resultPoupanca] = await Promise.all([getApiHGBrasil(), getApiInfomoney(), getApiPoupanca()]);
+
+        console.log('resultHGBrasil: ', resultHGBrasil);
+        console.log('resultInfomoney: ', resultInfomoney);
+        console.log('resultPoupanca: ', resultPoupanca);
+
+        console.log('TODAS: ', { cdiSelic: resultHGBrasil, bolsa: resultInfomoney, poupanca: resultPoupanca });
+
+        // socket.emit('quotationData', JSON.stringify(result.data));
+    } catch (error) {
+        console.error(`Error getApis: ${error.code}`);
     }
 };
 
@@ -53,10 +123,19 @@ const getApi = async (socket) => {
 //     return next(new Error('authentication error'));
 // });
 
+// Origins
+// io.origins((origin, callback) => {
+//     if (origin !== 'https://foo.example.com') {
+//         return callback('origin not allowed', false);
+//     }
+
+//     return callback(null, true);
+// });
+
 io.on('connection', (socket) => {
     console.log('log: new user connected');
 
-    getApi(socket);
+    getApis(socket);
 
     if (interval) {
         clearInterval(interval);
@@ -65,7 +144,7 @@ io.on('connection', (socket) => {
     interval = setInterval(() => {
         console.log('interval');
 
-        getApi(socket);
+        getApis(socket);
     }, 30000);
 
     socket.on('disconnect', (reason) => {
