@@ -51,8 +51,6 @@ const getApiHGBrasil = async () => {
     try {
         const result = await apiCache30Day.get('https://api.hgbrasil.com/finance/taxes?key=0af40e75');
 
-        console.log('getApiHGBrasil: ', result.data.results);
-
         return result.data.results;
     } catch (error) {
         console.error(`Error getApiHGBrasil: ${error.code}`);
@@ -67,8 +65,6 @@ const getApiInfomoney = async () => {
     try {
         const result = await axios.get('https://api.infomoney.com.br/ativos/ticker?type=json&_=1143');
 
-        console.log('getApiInfomoney: ', result.data);
-
         return result.data;
     } catch (error) {
         console.error(`Error getApiInfomoney: ${error.code}`);
@@ -82,8 +78,6 @@ const getApiPoupanca = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/1?formato=json');
 
-        console.log('getApiPoupanca: ', result.data);
-
         return result.data;
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
@@ -91,8 +85,7 @@ const getApiPoupanca = async () => {
 };
 
 /**
- * @description busca todas as apis.
- * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney)
+ * @description Busca todas as apis.
  * @param {object} socket Objeto do socket.io.
  */
 const getApis = async (socket) => {
