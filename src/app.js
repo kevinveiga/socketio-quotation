@@ -1,10 +1,18 @@
+// Lib
 import axios from 'axios';
 import { cacheAdapterEnhancer } from 'axios-extensions';
-import express from 'express';
+
+// Node
 import http from 'http';
-import socketIo from 'socket.io';
 import path from 'path';
 
+// Server
+import express from 'express';
+
+// Socket
+import socketIo from 'socket.io';
+
+// Config
 import { pathPublic, port } from './config.js';
 
 // VARIABLE
