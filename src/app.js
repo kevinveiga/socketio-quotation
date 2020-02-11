@@ -3,6 +3,7 @@ import { cacheAdapterEnhancer } from 'axios-extensions';
 import express from 'express';
 import http from 'http';
 import socketIo from 'socket.io';
+import path from 'path';
 
 import { pathPublic, port } from './config.js';
 
@@ -40,7 +41,7 @@ app.use((req, res, next) => {
 
 // GET
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 // FUNCTION
@@ -55,6 +56,8 @@ const getApiHGBrasil = async () => {
     } catch (error) {
         console.error(`Error getApiHGBrasil: ${error.code}`);
     }
+
+    return null;
 };
 
 /**
@@ -69,6 +72,8 @@ const getApiInfomoney = async () => {
     } catch (error) {
         console.error(`Error getApiInfomoney: ${error.code}`);
     }
+
+    return null;
 };
 
 /**
@@ -82,6 +87,8 @@ const getApiPoupanca = async () => {
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
     }
+
+    return null;
 };
 
 /**
