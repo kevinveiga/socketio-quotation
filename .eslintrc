@@ -4,7 +4,7 @@
         "es6": true,
         "node": true
     },
-    "extends": ["airbnb", "plugin:jsx-a11y/recommended", "plugin:prettier/recommended", "prettier/react"],
+    "extends": ["airbnb-base", "plugin:prettier/recommended", "prettier"],
     "globals": {
         "$": true,
         "document": true,
