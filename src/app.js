@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
 
 // FUNCTION
 /**
- * @description Busca api do CDI e SELIC da HG Brasil.
+ * @description Busca API do CDI e SELIC da HG Brasil.
  */
 const getApiHGBrasil = async () => {
     try {
@@ -58,7 +58,7 @@ const getApiHGBrasil = async () => {
 };
 
 /**
- * @description Busca api da Infomoney.
+ * @description Busca API da Infomoney.
  * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney)
  */
 const getApiInfomoney = async () => {
@@ -72,7 +72,7 @@ const getApiInfomoney = async () => {
 };
 
 /**
- * @description Busca api da Poupança do Banco Central.
+ * @description Busca API da Poupança do Banco Central.
  */
 const getApiPoupanca = async () => {
     try {
@@ -85,20 +85,16 @@ const getApiPoupanca = async () => {
 };
 
 /**
- * @description Busca todas as apis.
+ * @description Busca todas as API's.
  * @param {object} socket Objeto do socket.io.
  */
 const getApis = async (socket) => {
     try {
         const [resultHGBrasil, resultInfomoney, resultPoupanca] = await Promise.all([getApiHGBrasil(), getApiInfomoney(), getApiPoupanca()]);
 
-        console.log('resultHGBrasil: ', resultHGBrasil);
-        console.log('resultInfomoney: ', resultInfomoney);
-        console.log('resultPoupanca: ', resultPoupanca);
-
         console.log('TODAS: ', { cdiSelic: resultHGBrasil, bolsa: resultInfomoney, poupanca: resultPoupanca });
 
-        // socket.emit('quotationData', JSON.stringify(result.data));
+        socket.emit('quotationData', JSON.stringify({ cdiSelic: resultHGBrasil, bolsa: resultInfomoney, poupanca: resultPoupanca }));
     } catch (error) {
         console.error(`Error getApis: ${error.code}`);
     }

@@ -12,10 +12,7 @@
         "jQuery": true,
         "importScripts": true,
         "localStorage": true,
-        "React": true,
-        "RdIntegration": true,
-        "window": true,
-        "workbox": true
+        "window": true
     },
     "parser": "babel-eslint",
     "parserOptions": {
@@ -26,7 +23,7 @@
         "ecmaVersion": 2018,
         "sourceType": "module"
     },
-    "plugins": ["jsx-a11y", "react", "react-hooks", "prettier"],
+    "plugins": ["prettier"],
     "root": true,
     "rules": {
         "arrow-body-style": "off",
@@ -52,13 +49,6 @@
                 "SwitchCase": 1
             }
         ],
-        "jsx-a11y/anchor-is-valid": "off",
-        "jsx-a11y/alt-text": "warn",
-        "jsx-a11y/href-no-hash": "off",
-        "jsx-a11y/label-has-associated-control": "off",
-        "jsx-a11y/label-has-for": "off",
-        "jsx-a11y/no-onchange": "off",
-        "jsx-quotes": ["warn", "prefer-double"],
         "new-cap": "off",
         "no-alert": "off",
         "no-bitwise": "off",
@@ -122,58 +112,6 @@
                 "allowTemplateLiterals": true
             }
         ],
-        "react/boolean-prop-naming": "off",
-        "react/button-has-type": "off",
-        "react/jsx-boolean-value": ["warn", "always"],
-        "react/jsx-closing-bracket-location": ["warn", "tag-aligned"],
-        "react/jsx-curly-brace-presence": "off",
-        "react/jsx-curly-spacing": ["warn", "never"],
-        "react/jsx-filename-extension": [
-            "warn",
-            {
-                "extensions": [".js"]
-            }
-        ],
-        "react/jsx-first-prop-new-line": ["warn", "multiline"],
-        "react/jsx-handler-names": [
-            "warn",
-            {
-                "eventHandlerPrefix": "handle",
-                "eventHandlerPropPrefix": "on"
-            }
-        ],
-        "react/jsx-indent": ["error", 4, { "checkAttributes": false, "indentLogicalExpressions": false }],
-        "react/jsx-indent-props": "off",
-        "react/jsx-key": "error",
-        "react/jsx-no-bind": "error",
-        "react/jsx-one-expression-per-line": "off",
-        "react/jsx-pascal-case": "warn",
-        "react/jsx-props-no-spreading": "off",
-        "react/jsx-wrap-multilines": "warn",
-        "react/prefer-stateless-function": "warn",
-        "react/prop-types": "off",
-        "react/require-extension": "off",
-        "react/require-render-return": "warn",
-        "react/self-closing-comp": [
-            "warn",
-            {
-                "component": true,
-                "html": false
-            }
-        ],
-        "react/sort-comp": [
-            "error",
-            {
-                "order": ["static-methods", "lifecycle", "everything-else", "rendering"],
-                "groups": {
-                    "rendering": ["/^render.+$/", "render"]
-                }
-            }
-        ],
-        "react/static-property-placement": "off",
-        "react/style-prop-object": "warn",
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
         "semi": "error",
         "strict": "error"
     }
