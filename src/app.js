@@ -73,10 +73,15 @@ const getApiHGBrasil = async () => {
  * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney)
  */
 const getApiInfomoney = async () => {
+    const valuesToRemove = ['ABEV3', 'GGBR4', 'IFIX', 'ITUB4', 'MGLU3', 'PETR4', 'VALE3'];
+
     try {
         const result = await axios.get('https://api.infomoney.com.br/ativos/ticker?type=json&_=1143');
+        const newResult = result.data.filter((elem) => {
+            return valuesToRemove.indexOf(elem.Name) === -1;
+        });
 
-        return result.data;
+        return newResult;
     } catch (error) {
         console.error(`Error getApiInfomoney: ${error.code}`);
     }
@@ -106,8 +111,6 @@ const getApiPoupanca = async () => {
 const getApis = async (socket) => {
     try {
         const [resultHGBrasil, resultInfomoney, resultPoupanca] = await Promise.all([getApiHGBrasil(), getApiInfomoney(), getApiPoupanca()]);
-
-        console.log('TODAS: ', { cdiSelic: resultHGBrasil, bolsa: resultInfomoney, poupanca: resultPoupanca });
 
         socket.emit('quotationData', JSON.stringify({ cdiSelic: resultHGBrasil, bolsa: resultInfomoney, poupanca: resultPoupanca }));
     } catch (error) {
