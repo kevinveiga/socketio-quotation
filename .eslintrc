@@ -6,13 +6,8 @@
     },
     "extends": ["airbnb-base", "plugin:prettier/recommended", "prettier"],
     "globals": {
-        "$": true,
-        "document": true,
         "fetch": true,
-        "jQuery": true,
-        "importScripts": true,
-        "localStorage": true,
-        "window": true
+        "importScripts": true
     },
     "parser": "babel-eslint",
     "parserOptions": {
