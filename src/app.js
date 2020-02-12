@@ -70,7 +70,8 @@ const getApiHGBrasil = async () => {
 
 /**
  * @description Busca API da Infomoney.
- * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney)
+ * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney,
+ * pode ser usado os dados da HG Brasil no lugar da Infomoney)
  */
 const getApiInfomoney = async () => {
     const valuesToRemove = ['ABEV3', 'GGBR4', 'IFIX', 'ITUB4', 'MGLU3', 'PETR4', 'VALE3'];
