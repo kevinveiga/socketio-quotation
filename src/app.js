@@ -152,7 +152,7 @@ io.on('connection', (socket) => {
         console.log('interval');
 
         getApis(socket);
-    }, 30000);
+    }, 100000);
 
     socket.on('disconnect', (reason) => {
         console.info('User disconnect: ', reason);
