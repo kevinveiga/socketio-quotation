@@ -150,10 +150,15 @@ io.on('connection', (socket) => {
     }
 
     interval = setInterval(() => {
-        console.log('interval');
+        console.clear();
+
+        const today = new Date();
+        const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+
+        console.log(`Log: get API in ${dateTime}`);
 
         getApis(socket);
-    }, 100000);
+    }, 5000);
 
     socket.on('disconnect', (reason) => {
         console.info('User disconnect: ', reason);
