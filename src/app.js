@@ -149,6 +149,7 @@ io.on('connection', (socket) => {
         clearInterval(interval);
     }
 
+    // Intervalo a cada 1 minuto
     interval = setInterval(() => {
         console.clear();
 
@@ -158,7 +159,7 @@ io.on('connection', (socket) => {
         console.log(`Log: get API in ${dateTime}`);
 
         getApis(socket);
-    }, 5000);
+    }, 60000);
 
     socket.on('disconnect', (reason) => {
         console.info('User disconnect: ', reason);
