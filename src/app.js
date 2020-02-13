@@ -187,14 +187,14 @@ io.on('connection', (socket) => {
 });
 
 // Don't use to event name
-// error
 // connect
+// error
 // disconnect
 // disconnecting
 // newListener
-// removeListener
 // ping
 // pong
+// removeListener
 
 server.listen(port, () => {
     console.log(`Listening on *:${port}`);
