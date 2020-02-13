@@ -119,6 +119,15 @@ const getApis = async (socket) => {
     }
 };
 
+const getInfo = () => {
+    console.log(`Running in: ${process.env.NODE_ENV}`);
+
+    const today = new Date();
+    const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+
+    console.log(`Log: get API in ${dateTime}`);
+};
+
 // SOCKET
 // Middleware
 // io.use((socket, next) => {
@@ -141,39 +150,40 @@ const getApis = async (socket) => {
 // });
 
 io.on('connection', (socket) => {
-    console.log('Log: new user connected');
+    try {
+        console.log('Log: new user connected');
 
-    getApis(socket);
-
-    if (interval) {
-        clearInterval(interval);
-    }
-
-    // Intervalo a cada 1 minuto
-    interval = setInterval(() => {
-        console.clear();
-
-        console.log(`Running in: ${process.env.NODE_ENV}`);
-
-        const today = new Date();
-        const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
-
-        console.log(`Log: get API in ${dateTime}`);
+        getInfo();
 
         getApis(socket);
-    }, 60000);
 
-    socket.on('disconnect', (reason) => {
-        console.info('User disconnect: ', reason);
-    });
+        if (interval) {
+            clearInterval(interval);
+        }
 
-    socket.on('disconnecting', (reason) => {
-        console.info('User disconnecting: ', reason);
-    });
+        // Intervalo a cada 1 minuto
+        interval = setInterval(() => {
+            console.clear();
 
-    socket.on('error', (error) => {
-        console.error('error: ', error);
-    });
+            getInfo();
+
+            getApis(socket);
+        }, 60000);
+
+        socket.on('disconnect', (reason) => {
+            console.info('User disconnect: ', reason);
+        });
+
+        socket.on('disconnecting', (reason) => {
+            console.info('User disconnecting: ', reason);
+        });
+
+        socket.on('error', (error) => {
+            console.error('Error: ', error);
+        });
+    } catch (error) {
+        console.error('Error: ', error);
+    }
 });
 
 // Don't use to event name
