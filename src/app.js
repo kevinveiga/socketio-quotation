@@ -141,7 +141,7 @@ const getApis = async (socket) => {
 // });
 
 io.on('connection', (socket) => {
-    console.log('log: new user connected');
+    console.log('Log: new user connected');
 
     getApis(socket);
 
@@ -152,6 +152,8 @@ io.on('connection', (socket) => {
     // Intervalo a cada 1 minuto
     interval = setInterval(() => {
         console.clear();
+
+        console.log(`Running in: ${process.env.NODE_ENV}`);
 
         const today = new Date();
         const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
@@ -185,5 +187,5 @@ io.on('connection', (socket) => {
 // pong
 
 server.listen(port, () => {
-    console.log(`listening on *:${port}`);
+    console.log(`Listening on *:${port}`);
 });
