@@ -62,7 +62,9 @@ const getApiCdi = async () => {
 
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 ? '-' : '+', variation: variation };
+        const operator = variation < 0 && '-';
+
+        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: operator, variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiCDI: ${error.code}`);
     }
@@ -102,7 +104,9 @@ const getApiPoupanca = async () => {
 
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 ? '-' : '+', variation: variation };
+        const operator = variation < 0 && '-';
+
+        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: operator, variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
     }
@@ -119,7 +123,9 @@ const getApiSelic = async () => {
 
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 ? '-' : '+', variation: variation };
+        const operator = variation < 0 && '-';
+
+        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: operator, variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiSELIC: ${error.code}`);
     }
