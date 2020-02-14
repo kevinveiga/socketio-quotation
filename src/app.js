@@ -26,11 +26,11 @@ const apiCache1Day = axios.create({
     headers: { 'Cache-Control': 'no-cache' }
 });
 
-const apiCache30Day = axios.create({
-    adapter: cacheAdapterEnhancer(axios.defaults.adapter, { maxAge: 1000 * 60 * 60 * 24 * 30, max: 300000000 }),
-    baseURL: '/',
-    headers: { 'Cache-Control': 'no-cache' }
-});
+// const apiCache30Day = axios.create({
+//     adapter: cacheAdapterEnhancer(axios.defaults.adapter, { maxAge: 1000 * 60 * 60 * 24 * 30, max: 300000000 }),
+//     baseURL: '/',
+//     headers: { 'Cache-Control': 'no-cache' }
+// });
 
 let interval = null;
 
@@ -54,15 +54,17 @@ app.get('/', (req, res) => {
 
 // FUNCTION
 /**
- * @description Busca API do CDI e SELIC da HG Brasil.
+ * @description Busca API da CDI do Banco Central.
  */
-const getApiHGBrasil = async () => {
+const getApiCdi = async () => {
     try {
-        const result = await apiCache30Day.get('https://api.hgbrasil.com/finance/taxes?key=0af40e75');
+        const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados/ultimos/2?formato=json');
 
-        return result.data.results;
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 ? '-' : '+', variation: variation };
     } catch (error) {
-        console.error(`Error getApiHGBrasil: ${error.code}`);
+        console.error(`Error getApiCDI: ${error.code}`);
     }
 
     return null;
@@ -71,13 +73,14 @@ const getApiHGBrasil = async () => {
 /**
  * @description Busca API da Infomoney.
  * (Obs: caso ocorra algum erro, provavelmente chegou no limite de requisições permitidas da Infomoney,
- * pode ser usado os dados da HG Brasil no lugar da Infomoney)
+ * pode ser usado os dados da HG Brasil no lugar da Infomoney).
  */
 const getApiInfomoney = async () => {
     const valuesToRemove = ['ABEV3', 'GGBR4', 'IFIX', 'ITUB4', 'MGLU3', 'PETR4', 'VALE3'];
 
     try {
         const result = await axios.get('https://api.infomoney.com.br/ativos/ticker?type=json&_=1143');
+
         const newResult = result.data.filter((elem) => {
             return valuesToRemove.indexOf(elem.Name) === -1;
         });
@@ -95,11 +98,30 @@ const getApiInfomoney = async () => {
  */
 const getApiPoupanca = async () => {
     try {
-        const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/1?formato=json');
+        const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
-        return result.data;
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 ? '-' : '+', variation: variation };
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
+    }
+
+    return null;
+};
+
+/**
+ * @description Busca API da SELIC do Banco Central.
+ */
+const getApiSelic = async () => {
+    try {
+        const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/2?formato=json');
+
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 ? '-' : '+', variation: variation };
+    } catch (error) {
+        console.error(`Error getApiSELIC: ${error.code}`);
     }
 
     return null;
@@ -111,9 +133,9 @@ const getApiPoupanca = async () => {
  */
 const getApis = async (socket) => {
     try {
-        const [resultHGBrasil, resultInfomoney, resultPoupanca] = await Promise.all([getApiHGBrasil(), getApiInfomoney(), getApiPoupanca()]);
+        const [resultCdi, resultInfomoney, resultPoupanca, resultSelic] = await Promise.all([getApiCdi(), getApiInfomoney(), getApiPoupanca(), getApiSelic()]);
 
-        socket.emit('quotationData', JSON.stringify({ cdiSelic: resultHGBrasil, bolsa: resultInfomoney, poupanca: resultPoupanca }));
+        socket.emit('quotationData', JSON.stringify({ bolsa: resultInfomoney, cdi: resultCdi, poupanca: resultPoupanca, selic: resultSelic }));
     } catch (error) {
         console.error(`Error getApis: ${error.code}`);
     }
@@ -161,7 +183,7 @@ io.on('connection', (socket) => {
             clearInterval(interval);
         }
 
-        // Intervalo a cada 1 minuto
+        // Intervalo de 1 minuto
         interval = setInterval(() => {
             console.clear();
 
