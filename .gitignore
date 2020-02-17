@@ -4,6 +4,9 @@
 .#*
 .DS_Store
 
+# Environment
+.env*
+
 # IDE and Editors
 /.vscode
 /nbproject
@@ -42,7 +45,6 @@ yarn.lock*
 /public/uploads
 /storage/*.key
 /vendor
-.env
 composer.lock
 composer.phar
 Homestead.json

@@ -11,8 +11,8 @@
     "main": "./src/app.js",
     "scripts": {
         "prestart": "echo \"PreStart\"",
-        "dev": "NODE_ENV=development npm-run-all watch",
-        "prod": "NODE_ENV=production npm-run-all start",
+        "dev": "cross-env NODE_ENV=development npm-run-all watch",
+        "prod": "cross-env NODE_ENV=production npm-run-all start",
         "start": "babel-node ./src/app.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "nodemon"
@@ -22,6 +22,7 @@
         "@babel/node": "^7.8.3",
         "@babel/preset-env": "^7.8.3",
         "babel-eslint": "^10.0.3",
+        "cross-env": "^7.0.0",
         "eslint": "^6.8.0",
         "eslint-config-airbnb-base": "^14.0.0",
         "eslint-config-prettier": "^6.10.0",
@@ -34,6 +35,7 @@
     "dependencies": {
         "axios": "^0.19.2",
         "axios-extensions": "^3.0.6",
+        "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "socket.io": "^2.3.0"
     }
