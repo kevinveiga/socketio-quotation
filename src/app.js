@@ -8,6 +8,7 @@ import http from 'http';
 import path from 'path';
 
 // Server
+import cors from 'cors';
 import express from 'express';
 
 // Socket
@@ -20,6 +21,19 @@ import { config } from './config.js';
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+const whitelist = ['https://stage.liberta.com.vc'];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1 || !JSON.parse(config.cors)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    optionsSuccessStatus: 200
+};
 
 const apiCache1Day = axios.create({
     adapter: cacheAdapterEnhancer(axios.defaults.adapter, { maxAge: 1000 * 60 * 60 * 24, max: 1000 }),
@@ -36,10 +50,10 @@ const apiCache1Day = axios.create({
 let interval = null;
 
 // CONFIG
-app.use(express.static(config.pathPublic));
+// app.use(express.static(config.pathPublic));
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'https://stage.liberta.com.vc');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'content-type');
     res.setHeader('Content-Type', 'application/json');
@@ -49,8 +63,9 @@ app.use((req, res, next) => {
 });
 
 // GET
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'));
+app.get('/', cors(corsOptions), (req, res) => {
+    res.json({ msg: 'This is CORS-enabled for a whitelisted domain.' });
+    // res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 // FUNCTION
@@ -143,8 +158,6 @@ const getApis = async (socket) => {
 };
 
 const getInfo = () => {
-    console.log(`Running in: ${process.env.NODE_ENV}`);
-
     const today = new Date();
     const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
 
@@ -191,7 +204,7 @@ io.on('connection', (socket) => {
             getInfo();
 
             getApis(socket);
-        }, 60000);
+        }, 6000);
 
         socket.on('disconnect', (reason) => {
             console.info('User disconnect: ', reason);
