@@ -2,6 +2,7 @@
 // Lib
 import axios from 'axios';
 import { cacheAdapterEnhancer } from 'axios-extensions';
+import morgan from 'morgan';
 
 // Node
 import http from 'http';
@@ -48,6 +49,8 @@ let interval = null;
 
 // CONFIG
 // app.use(express.static(config.pathPublic));
+
+app.use(morgan(':method :url :status :response-time ms'));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', JSON.parse(config.cors) ? config.corsUrl : '*');
