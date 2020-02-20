@@ -56,6 +56,8 @@ app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Credentials', true);
 
+    console.log(`Request ip: ${req.ip} - ${getDateTime()}`);
+
     next();
 });
 
