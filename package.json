@@ -8,6 +8,9 @@
     "description": "",
     "license": "ISC",
     "private": true,
+    "engines": {
+        "node": "11.x.x"
+    },
     "main": "./src/app.js",
     "scripts": {
         "heroku-prebuild": "echo \"Heroku-prebuild\"",
@@ -16,7 +19,7 @@
         "dev": "cross-env NODE_ENV=development npm-run-all watch",
         "prod": "cross-env NODE_ENV=production npm-run-all start",
         "stage": "cross-env NODE_ENV=staging npm-run-all start",
-        "start": "./node_modules/.bin/babel-node ./src/app.js",
+        "start": "babel-node ./src/app.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "nodemon"
     },
