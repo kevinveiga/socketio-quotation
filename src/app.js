@@ -50,11 +50,11 @@ let interval = null;
 // app.use(express.static(config.pathPublic));
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', JSON.parse(config.cors) ? config.corsUrl : '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'content-type');
-    res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Headers', 'content-type');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Origin', JSON.parse(config.cors) ? config.corsUrl : '*');
+    res.setHeader('Content-Type', 'application/json');
 
     console.log(`Request ip: ${req.ip} - ${getDateTime()}`);
 
