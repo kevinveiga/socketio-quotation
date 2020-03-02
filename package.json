@@ -10,7 +10,10 @@
     "private": true,
     "main": "./src/app.js",
     "scripts": {
+        "heroku-prebuild": "echo \"Heroku-prebuild\"",
+        "heroku-postbuild": "echo \"Heroku-postbuild\"",
         "prestart": "echo \"PreStart\"",
+        "build": "start",
         "dev": "cross-env NODE_ENV=development npm-run-all watch",
         "prod": "cross-env NODE_ENV=production npm-run-all start",
         "stage": "cross-env NODE_ENV=staging npm-run-all start",
