@@ -9,7 +9,7 @@
     "license": "ISC",
     "private": true,
     "engines": {
-        "node": "11.x.x"
+        "node": "12.x"
     },
     "main": "./src/app.js",
     "scripts": {
