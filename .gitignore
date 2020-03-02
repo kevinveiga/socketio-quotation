@@ -5,7 +5,8 @@
 .DS_Store
 
 # Environment
-.env*
+.env.development
+.env.staging
 
 # IDE and Editors
 /.vscode
