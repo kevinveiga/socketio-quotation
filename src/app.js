@@ -204,7 +204,7 @@ io.on('connection', (socket) => {
             console.log(`Log: get API in ${getDateTime()}`);
 
             getApis(socket);
-        }, 6000);
+        }, 60000);
 
         socket.on('disconnect', (reason) => {
             console.info('User disconnect: ', reason);
