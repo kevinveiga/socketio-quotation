@@ -67,7 +67,7 @@ app.get('/', cors(corsOptions), (req, res) => {
     // res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// FUNCTION
+// API
 /**
  * @description Busca API da CDI do Banco Central.
  */
@@ -111,13 +111,33 @@ const getApiInfomoney = async () => {
 /**
  * @description Busca API da Poupança do Banco Central.
  */
+// Ao mês
+// const getApiPoupanca = async () => {
+//     try {
+//         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
+
+//         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+//         return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+//     } catch (error) {
+//         console.error(`Error getApiPoupanca: ${error.code}`);
+//     }
+
+//     return null;
+// };
+
+// Ao ano
 const getApiPoupanca = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+        const currentValue = annualCalc(result.data[1].valor);
 
-        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+        const previousValue = annualCalc(result.data[0].valor);
+
+        const variation = currentValue - previousValue;
+
+        return { value: currentValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
     }
@@ -154,6 +174,11 @@ const getApis = async (socket) => {
     } catch (error) {
         console.error(`Error getApis: ${error.code}`);
     }
+};
+
+// FUNCTION
+const annualCalc = (percentValue) => {
+    return parseFloat((((parseFloat(percentValue) / 100 + 1) ** 12 - 1) * 100).toFixed(2));
 };
 
 const getDateTime = () => {
