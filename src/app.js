@@ -131,13 +131,11 @@ const getApiPoupanca = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
-        const currentValue = annualCalc(result.data[1].valor);
+        const annualValue = annualCalc(result.data[1].valor);
 
-        const previousValue = annualCalc(result.data[0].valor);
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        const variation = currentValue - previousValue;
-
-        return { value: currentValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+        return { value: annualValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
     }
