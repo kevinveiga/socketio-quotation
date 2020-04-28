@@ -34,12 +34,13 @@
         "import/no-extraneous-dependencies": "off",
         "import/prefer-default-export": "off",
         "indent": [
-            "warn",
+            "off",
             4,
             {
+                "CallExpression": { "arguments": 1 },
                 "flatTernaryExpressions": false,
-                "FunctionDeclaration": { "body": 1, "parameters": 3 },
-                "FunctionExpression": { "body": 1, "parameters": 3 },
+                "FunctionDeclaration": { "body": 1, "parameters": 1 },
+                "FunctionExpression": { "body": 1, "parameters": 1 },
                 "MemberExpression": 1,
                 "SwitchCase": 1
             }
@@ -90,7 +91,7 @@
                 "endOfLine": "lf",
                 "jsxBracketSameLine": false,
                 "jsxSingleQuote": false,
-                "printWidth": 200,
+                "printWidth": 150,
                 "proseWrap": "preserve",
                 "requirePragma": false,
                 "semi": true,

@@ -77,7 +77,11 @@ const getApiCdi = async () => {
 
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+        return {
+            value: parseFloat(result.data[1].valor).toFixed(2),
+            operator: variation < 0 && '-',
+            variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}`
+        };
     } catch (error) {
         console.error(`Error getApiCDI: ${error.code}`);
     }
@@ -152,7 +156,11 @@ const getApiSelic = async () => {
 
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+        return {
+            value: parseFloat(result.data[1].valor).toFixed(2),
+            operator: variation < 0 && '-',
+            variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}`
+        };
     } catch (error) {
         console.error(`Error getApiSELIC: ${error.code}`);
     }
@@ -166,7 +174,12 @@ const getApiSelic = async () => {
  */
 const getApis = async (socket) => {
     try {
-        const [resultCdi, resultInfomoney, resultPoupanca, resultSelic] = await Promise.all([getApiCdi(), getApiInfomoney(), getApiPoupanca(), getApiSelic()]);
+        const [resultCdi, resultInfomoney, resultPoupanca, resultSelic] = await Promise.all([
+            getApiCdi(),
+            getApiInfomoney(),
+            getApiPoupanca(),
+            getApiSelic()
+        ]);
 
         socket.emit('quotationData', JSON.stringify({ bolsa: resultInfomoney, cdi: resultCdi, poupanca: resultPoupanca, selic: resultSelic }));
     } catch (error) {
@@ -181,7 +194,9 @@ const annualCalc = (percentValue) => {
 
 const getDateTime = () => {
     const today = new Date();
-    const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+    const dateTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${
+        today.getMonth() + 1
+    }/${today.getFullYear()}`;
 
     return dateTime;
 };
