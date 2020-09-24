@@ -76,18 +76,13 @@ const getApiCdi = async () => {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados/ultimos/2?formato=json');
 
         const cdiValue = parseFloat(result.data[1].valor).toFixed(2);
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        if (isNaN(cdiValue)) {
+        if (isNaN(cdiValue) || isNaN(variation)) {
             return null;
         }
 
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
-
-        return {
-            value: cdiValue,
-            operator: variation < 0 && '-',
-            variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}`
-        };
+        return { value: cdiValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiCDI: ${error.code}`);
     }
@@ -142,12 +137,11 @@ const getApiPoupanca = async () => {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
         const poupancaAnnualValue = annualCalc(result.data[1].valor);
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        if (isNaN(poupancaAnnualValue)) {
+        if (isNaN(poupancaAnnualValue) || isNaN(variation)) {
             return null;
         }
-
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
         return { value: poupancaAnnualValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
@@ -165,18 +159,13 @@ const getApiSelic = async () => {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/2?formato=json');
 
         const selicValue = parseFloat(result.data[1].valor).toFixed(2);
+        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        if (isNaN(selicValue)) {
+        if (isNaN(selicValue) || isNaN(variation)) {
             return null;
         }
 
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
-
-        return {
-            value: selicValue,
-            operator: variation < 0 && '-',
-            variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}`
-        };
+        return { value: selicValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiSELIC: ${error.code}`);
     }
