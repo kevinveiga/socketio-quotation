@@ -75,10 +75,16 @@ const getApiCdi = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados/ultimos/2?formato=json');
 
+        const cdiValue = parseFloat(result.data[1].valor).toFixed(2);
+
+        if (isNaN(cdiValue)) {
+            return null;
+        }
+
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
         return {
-            value: parseFloat(result.data[1].valor).toFixed(2),
+            value: cdiValue,
             operator: variation < 0 && '-',
             variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}`
         };
@@ -135,11 +141,15 @@ const getApiPoupanca = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
-        const annualValue = annualCalc(result.data[1].valor);
+        const poupancaAnnualValue = annualCalc(result.data[1].valor);
+
+        if (isNaN(poupancaAnnualValue)) {
+            return null;
+        }
 
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-        return { value: annualValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+        return { value: poupancaAnnualValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
     } catch (error) {
         console.error(`Error getApiPoupanca: ${error.code}`);
     }
@@ -154,10 +164,16 @@ const getApiSelic = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/2?formato=json');
 
+        const selicValue = parseFloat(result.data[1].valor).toFixed(2);
+
+        if (isNaN(selicValue)) {
+            return null;
+        }
+
         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
         return {
-            value: parseFloat(result.data[1].valor).toFixed(2),
+            value: selicValue,
             operator: variation < 0 && '-',
             variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}`
         };
