@@ -45,6 +45,8 @@ const apiCache1Day = axios.create({
 // });
 
 let interval = null;
+
+// Last values
 let lastCdiValue = null;
 let lastCdiVariation = null;
 // let lastPoupancaMonthlyValue = null;
