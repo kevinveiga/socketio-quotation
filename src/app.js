@@ -45,6 +45,14 @@ const apiCache1Day = axios.create({
 // });
 
 let interval = null;
+let lastCdiValue = null;
+let lastCdiVariation = null;
+// let lastPoupancaMonthlyValue = null;
+// let lastPoupancaMonthlyVariation = null;
+let lastPoupancaAnnualValue = null;
+let lastPoupancaAnnualVariation = null;
+let lastSelicValue = null;
+let lastSelicVariation = null;
 
 // CONFIG
 // app.use(express.static(config.pathPublic));
@@ -56,7 +64,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', JSON.parse(config.cors) ? config.corsUrl : '*');
     res.setHeader('Content-Type', 'application/json');
 
-    console.log(`Request ip: ${req.ip} - ${getDateTime()}`);
+    console.info(`Request ip: ${req.ip} - ${getDateTime()}`);
 
     next();
 });
@@ -75,8 +83,16 @@ const getApiCdi = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados/ultimos/2?formato=json');
 
-        const cdiValue = parseFloat(result.data[1].valor).toFixed(2);
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+        let cdiValue = parseFloat(result.data[1].valor).toFixed(2);
+        let variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+        if (isNaN(cdiValue) || isNaN(variation)) {
+            cdiValue = lastCdiValue;
+            variation = lastCdiVariation;
+        } else {
+            lastCdiValue = cdiValue;
+            lastCdiVariation = variation;
+        }
 
         if (isNaN(cdiValue) || isNaN(variation)) {
             return null;
@@ -121,9 +137,22 @@ const getApiInfomoney = async () => {
 //     try {
 //         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
-//         const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+//             const poupancaMonthlyValue = parseFloat(result.data[1].valor).toFixed(2);
+//             const poupancaMonthlyVariation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
-//         return { value: parseFloat(result.data[1].valor).toFixed(2), operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
+//             if (isNaN(poupancaMonthlyValue) || isNaN(poupancaMonthlyVariation)) {
+//                 poupancaMonthlyValue = lastPoupancaMonthlyValue;
+//                 poupancaMonthlyVariation = lastPoupancaMonthlyVariation;
+//             } else {
+//                 lastPoupancaMonthlyValue = poupancaMonthlyValue;
+//                 lastPoupancaMonthlyVariation = poupancaMonthlyVariation;
+//             }
+
+//             if (isNaN(poupancaMonthlyValue) || isNaN(poupancaMonthlyVariation)) {
+//                 return null;
+//             }
+
+//         return { value: poupancaMonthlyValue, operator: poupancaMonthlyVariation < 0 && '-', poupancaMonthlyVariation: `${poupancaMonthlyVariation > 0 ? '+' : ''}${poupancaAnnualVariation.toFixed(2)}` };
 //     } catch (error) {
 //         console.error(`Error getApiPoupanca: ${error.code}`);
 //     }
@@ -136,8 +165,16 @@ const getApiPoupanca = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/2?formato=json');
 
-        const poupancaAnnualValue = annualCalc(result.data[1].valor);
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+        let poupancaAnnualValue = annualCalc(result.data[1].valor);
+        let variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+        if (isNaN(poupancaAnnualValue) || isNaN(variation)) {
+            poupancaAnnualValue = lastPoupancaAnnualValue;
+            variation = lastPoupancaAnnualVariation;
+        } else {
+            lastPoupancaAnnualValue = poupancaAnnualValue;
+            lastPoupancaAnnualVariation = variation;
+        }
 
         if (isNaN(poupancaAnnualValue) || isNaN(variation)) {
             return null;
@@ -158,8 +195,16 @@ const getApiSelic = async () => {
     try {
         const result = await apiCache1Day.get('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/2?formato=json');
 
-        const selicValue = parseFloat(result.data[1].valor).toFixed(2);
-        const variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+        let selicValue = parseFloat(result.data[1].valor).toFixed(2);
+        let variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
+
+        if (isNaN(selicValue) || isNaN(variation)) {
+            selicValue = lastSelicValue;
+            variation = lastSelicVariation;
+        } else {
+            lastSelicValue = selicValue;
+            lastSelicVariation = variation;
+        }
 
         if (isNaN(selicValue) || isNaN(variation)) {
             return null;
@@ -220,8 +265,8 @@ const getDateTime = () => {
 
 // Origins
 io.origins((origin, callback) => {
-    console.log(`Origin: ${origin} - ${getDateTime()}`);
-    console.log(`Env corsUrl: ${config.corsUrl} - ${getDateTime()}`);
+    console.info(`Origin: ${origin} - ${getDateTime()}`);
+    console.info(`Env corsUrl: ${config.corsUrl} - ${getDateTime()}`);
 
     if (JSON.parse(config.cors) && origin !== config.corsUrl) {
         return callback('Origin not allowed', false);
@@ -232,7 +277,7 @@ io.origins((origin, callback) => {
 
 io.on('connection', (socket) => {
     try {
-        console.log(`Log: new user connected - ${getDateTime()}`);
+        console.info(`Log: new user connected - ${getDateTime()}`);
 
         getApis(socket);
 
@@ -244,7 +289,7 @@ io.on('connection', (socket) => {
         interval = setInterval(() => {
             console.clear();
 
-            console.log(`Log: get API in ${getDateTime()}`);
+            console.info(`Log: get API in ${getDateTime()}`);
 
             getApis(socket);
         }, 60000);
@@ -276,5 +321,5 @@ io.on('connection', (socket) => {
 // removeListener
 
 server.listen(config.port, () => {
-    console.log(`Listening on *:${config.port}`);
+    console.info(`Listening on *:${config.port}`);
 });
