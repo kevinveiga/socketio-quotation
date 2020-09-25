@@ -89,15 +89,15 @@ const getApiCdi = async () => {
         let variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
         if (isNaN(cdiValue) || isNaN(variation)) {
-            cdiValue = lastCdiValue;
-            variation = lastCdiVariation;
+            if (isNaN(lastCdiValue) || isNaN(lastCdiVariation)) {
+                return null;
+            } else {
+                cdiValue = lastCdiValue;
+                variation = lastCdiVariation;
+            }
         } else {
             lastCdiValue = cdiValue;
             lastCdiVariation = variation;
-        }
-
-        if (isNaN(cdiValue) || isNaN(variation)) {
-            return null;
         }
 
         return { value: cdiValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
@@ -171,15 +171,15 @@ const getApiPoupanca = async () => {
         let variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
         if (isNaN(poupancaAnnualValue) || isNaN(variation)) {
-            poupancaAnnualValue = lastPoupancaAnnualValue;
-            variation = lastPoupancaAnnualVariation;
+            if (isNaN(lastPoupancaAnnualValue) || isNaN(lastPoupancaAnnualVariation)) {
+                return null;
+            } else {
+                poupancaAnnualValue = lastPoupancaAnnualValue;
+                variation = lastPoupancaAnnualVariation;
+            }
         } else {
             lastPoupancaAnnualValue = poupancaAnnualValue;
             lastPoupancaAnnualVariation = variation;
-        }
-
-        if (isNaN(poupancaAnnualValue) || isNaN(variation)) {
-            return null;
         }
 
         return { value: poupancaAnnualValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
@@ -201,15 +201,15 @@ const getApiSelic = async () => {
         let variation = parseFloat(result.data[1].valor) - parseFloat(result.data[0].valor);
 
         if (isNaN(selicValue) || isNaN(variation)) {
-            selicValue = lastSelicValue;
-            variation = lastSelicVariation;
+            if (isNaN(lastSelicValue) || isNaN(lastSelicVariation)) {
+                return null;
+            } else {
+                selicValue = lastSelicValue;
+                variation = lastSelicVariation;
+            }
         } else {
             lastSelicValue = selicValue;
             lastSelicVariation = variation;
-        }
-
-        if (isNaN(selicValue) || isNaN(variation)) {
-            return null;
         }
 
         return { value: selicValue, operator: variation < 0 && '-', variation: `${variation > 0 ? '+' : ''}${variation.toFixed(2)}` };
