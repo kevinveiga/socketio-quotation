@@ -1,8 +1,8 @@
 module.exports = {
     apps: [
         {
-            name: 'socket-cotacoes',
-            script: 'npm -- run prod',
+            name: 'socket-quotation',
+            script: 'yarn -- run prod',
 
             // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
             args: '',
@@ -26,7 +26,7 @@ module.exports = {
             ref: 'origin/master',
             repo: 'git@github.com:repo.git',
             path: '/var/www/production',
-            'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
+            'post-deploy': 'yarn install && pm2 reload ecosystem.config.js --env production'
         }
     }
 };
