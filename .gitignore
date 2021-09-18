@@ -1,28 +1,46 @@
-# Cruft
-*~
-*#
-.#*
-.DS_Store
+# Compiled sources
+/error_log
+*.com
+*.class
+*.dll
+*.exe
+*.log
+*.o
+*.so
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
 
 # Environment
 .env*
 !.env.example
 
+# Generated
+/build
+
 # IDE and Editors
-/.vscode
 /nbproject
 /packages/api/etc
+_notes
 *.sublime-project
 *.sublime-workspace
-.idea
 .brackets.json
+.idea
 .project
-_notes
+
+# Misc
+*~
+*#
+*.pem
+.#*
+.DS_Store
 
 # Npm & Yarn
-/node_modules
 .npm
 .yarn-integrity
+last-package.json
 npm-debug.log*
 package-lock.json
 yarn-debug.log*
@@ -54,9 +72,6 @@ Homestead.yaml
 # Test
 /coverage
 .eslintcache
-
-# Generated
-/public/asset
 
 # Gitkeep
 !**/.gitkeep
