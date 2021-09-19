@@ -1,0 +1,60 @@
+# Compiled sources
+/error_log
+*.com
+*.class
+*.dll
+*.exe
+*.log
+*.o
+*.so
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Generated
+/build
+/public/assets
+
+# IDE and Editors
+/.vscode
+/nbproject
+/packages/api/etc
+_notes
+*.sublime-project
+*.sublime-workspace
+.brackets.json
+.idea
+.project
+
+# Misc
+*~
+*#
+*.pem
+.#*
+.DS_Store
+
+# Npm & Yarn
+.npm
+.yarn-integrity
+last-package.json
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+yarn.lock*
+
+# NextJS
+/.next
+/out
+
+# Test
+/coverage
+.eslintcache
+
+# Vercel
+.vercel
+
+# Gitkeep
+!**/.gitkeep

@@ -1,5 +1,5 @@
 {
-    "exec": "npm run start",
+    "exec": "yarn start",
     "ext": "css, html, js, json",
     "watch": ["src/**/*"]
 }
